@@ -1,5 +1,5 @@
 ##Test script between R built-in function and matrix-based function
-source('../kruX.R')
+source('../r/kruX.R')
 args <- commandArgs(trailingOnly = TRUE)
 num.sample=as.integer(args[1])
 num.snp=as.integer(args[2])
