@@ -3,7 +3,7 @@ import subprocess
 import time
 import os
 import sys
-sys.path.append('..')
+sys.path.append('../python/')
 import kruX
 
 def test(numSample, numSNP, numMRNA, perMissing, pThreshold):
