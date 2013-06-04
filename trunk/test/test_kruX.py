@@ -25,7 +25,7 @@ def test(numSample, numSNP, numMRNA, perMissing, pThreshold):
                      pValueThre = pThreshold)
   endTime = time.clock() - start
   print('Total running time for Python matrix-based test: %.2f'%(endTime))
-  numpy.savetxt('python.output', outputFromPython, fmt='%i\t%i\t%i\t%.7f\t%.7f',delimiter='\t')
+  numpy.savetxt('python.output', outputFromPython, fmt='%i\t%i\t%i\t%.17e\t%.17e',delimiter='\t')
   if (numpy.all(outputFromR['pvalue']-outputFromPython['pvalue']<1e-7)):
     print('Passed: equal between R matrix-based  and Python matrix-based test')
   else:  
@@ -50,4 +50,4 @@ def test_python_performance(numSample, numSNP, numMRNA, perMissing, pThreshold):
 if __name__ == '__main__':
   for i in range(1):
     print(str(i))
-    test(100, 100, 100, 0.2, 0.8)
+    test(100, 100, 100, 0.2, 1)
