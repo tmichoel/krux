@@ -130,7 +130,8 @@ def calculateKruskalWallisWithMatrix(geno,
 
     #find the index of pairs with pvalue less then threshold
     #build record array to save information of selected pairs
-    pairSelected = numpy.where(preResult['testStat'] > preResult['chi2Thre'])
+    #Jun 2, 2013 Bug fixed >= instead of >
+    pairSelected = numpy.where(preResult['testStat'] >= preResult['chi2Thre'])
     SNPs = numpy.ravel(snpsID)[pairSelected[0]]
     genes = numpy.arange(preResult['mrna'][0], preResult['mrna'][1])[pairSelected[1]]
     fd = preResult['chiSquareFD'][pairSelected]
@@ -177,13 +178,14 @@ def calculateKruskalWallisWithMatrix(geno,
       calculateMissing(snpsWithMissing, preResult)
       result = postCalculate(snpsWithMissing, preResult)
       output.append(result) if result.size>0 else None
-  output = numpy.concatenate(output)
-  output = output[numpy.argsort(output['pvalue'])]
 
+  if (output):#Bug
+    output = numpy.concatenate(output)
+    output = output[numpy.argsort(output['pvalue'])]
+  
   return(output)
 
 
 if __name__ == '__main__':
   for i in range(10):
     print(str(i))
-    test(1000, 100, 100, 0.2, 0.8)
