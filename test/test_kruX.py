@@ -51,3 +51,4 @@ if __name__ == '__main__':
   for i in range(1):
     print(str(i))
     test(100, 100, 100, 0.2, 1)
+    #test_python_performance(100, 100, 100, 0.2, 1)

@@ -138,7 +138,7 @@ def calculateKruskalWallisWithMatrix(geno,
     chi = (preResult['testStat'][pairSelected] * 12 / 
           (preResult['N'][pairSelected] * (preResult['N'][pairSelected] + 1))
           - 3 * (preResult['N'][pairSelected] + 1))
-    pValue = 1 - scipy.stats.chi2.cdf(chi, fd)
+    pValue = scipy.stats.chi2.sf(chi, fd) #use sf to get more accrate value
 
     #return a structured array
     result = numpy.core.records.fromarrays([SNPs, genes, fd, chi, pValue],
