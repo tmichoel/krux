@@ -4,12 +4,13 @@ Tested on Python3.2 with numpy1.7 and scipy0.12
 
 import numpy 
 import scipy.stats
-#import IPython
+import scipy.stats.mstats
+#import profilehooks
 import pdb
 import subprocess
 import os 
 import time
-
+#@profilehooks.timecall
 def calculateKruskalWallisWithMatrix(geno, 
                                      mrna,
                                      pValueThre = 1e-3,
@@ -33,6 +34,8 @@ def calculateKruskalWallisWithMatrix(geno,
      Ordered transcript-SNP pairs by their p-values
   
   version 1.0 May 2, 2013 Initial code
+	      Jun 7, 2012 remove numpy.apply_along_axis function
+                          
   """
 
   def preCalculate(snpsID, mrnaStart, mrnaEnd):
@@ -55,8 +58,10 @@ def calculateKruskalWallisWithMatrix(geno,
     #chiSquareFD is the freedom for each test
     #Broadcasting snps[snpsID] to match snpsCorrect 
     N = snps[snpsID].transpose()[:,:,numpy.newaxis]-snpsCorrect 
-    chiSquareFD = numpy.apply_along_axis(numpy.sum, 0, N>0) - 1 
-    N = numpy.apply_along_axis(numpy.sum, 0, N)
+    #chiSquareFD = numpy.apply_along_axis(numpy.sum, 0, N>0) - 1 
+    #N = numpy.apply_along_axis(numpy.sum, 0, N)
+    chiSquareFD = numpy.sum(N>0, 0) - 1 
+    N = numpy.sum(N, 0)
 
     #Threshold for the chi-square test between each pair given the p-value
     chi2Thre = (scipy.stats.chi2.ppf(1-pValueThre, chiSquareFD) +  
@@ -73,15 +78,16 @@ def calculateKruskalWallisWithMatrix(geno,
     #Calculate ranks for selected transcripts. NA's rank is replaced by 0
     #Note that masked array is also an option
     mrnaSelected = mrna[preResult['mrna'][0]:preResult['mrna'][1]]
-    expressionRank = numpy.apply_along_axis(scipy.stats.rankdata,1,
-                      mrnaSelected)
+    #expressionRank = numpy.apply_along_axis(scipy.stats.rankdata,1,mrnaSelected)
+    expressionRank = scipy.stats.mstats.rankdata(mrnaSelected,1)
     expressionRank[numpy.where(numpy.isnan(mrnaSelected))] = 0
     
     #calulate rank statistics for different genotype values(0,1,2) and then sum
     testStat = numpy.power(numpy.dot(genoRank[:,snpsID[0],:], expressionRank.transpose()),2) / \
                (snps[snpsID].transpose()[:,:,numpy.newaxis] - preResult["snpsCorrect"])
     testStat[numpy.where(numpy.isnan(testStat))] = 0
-    testStat = numpy.apply_along_axis(numpy.sum, 0,testStat) 
+    #testStat = numpy.apply_along_axis(numpy.sum, 0,testStat) 
+    testStat = numpy.sum(testStat,0) 
     preResult['testStat'] = testStat
 
     return
@@ -118,7 +124,8 @@ def calculateKruskalWallisWithMatrix(geno,
               (snps[snpsID].transpose()[:,:,numpy.newaxis] - 
                preResult["snpsCorrect"])
     testStat[numpy.where(numpy.isnan(testStat))] = 0
-    testStat = numpy.apply_along_axis(numpy.sum, 0,testStat)
+    #testStat = numpy.apply_along_axis(numpy.sum, 0,testStat)
+    testStat = numpy.sum(testStat, 0)
     preResult['testStat'] = testStat
 
     return
