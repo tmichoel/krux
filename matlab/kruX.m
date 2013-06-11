@@ -79,68 +79,79 @@ In = C==-1 | isnan(C);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ixc = find(sum(In,2)==0);
 
-% number of elements in each group for all pairs of rows
-Ne = cell(nC+1,1);
-if missD==0
+% there may be no such markers ...
+if ~isempty(ixc)
+
+    % number of elements in each group for all pairs of rows
+    Ne = cell(nC+1,1);
+    if missD==0
+        for k=0:nC
+            Ne{k+1} = repmat(sum(Ic{k+1}(ixc,:),2)', [size(R,1),1]);
+        end
+    else
+        for k=0:nC
+            Ne{k+1} = Z*Ic{k+1}(ixc,:)';
+        end
+    end
+    
+    % sum of (mean rank)^2 x number of elements in each group for all pairs of
+    % rows
+    S = zeros(size(D,1),length(ixc));
     for k=0:nC
-       Ne{k+1} = repmat(sum(Ic{k+1}(ixc,:),2)', [size(R,1),1]);
-    end    
-else
+        mR = ((R*Ic{k+1}(ixc,:)').^2)./Ne{k+1};
+        % any NaN result from 0/0 for empty groups, set them to 0 to remove from sum
+        mR(isnan(mR)) = 0;
+        % sum
+        S = S + mR;
+    end
+    
+    % Kruskal-Wallis test statistic
+    if missD==0
+        S = 12*S./(K.*(K+1)) - 3*(K+1);
+        % With Statistics Toolbox we can adjust for ties
+        if flag==0
+            adjust = 1 - 2*tieadj'./(K^3-K);
+            S = S./repmat(adjust,[1 size(S,2)]);
+        end
+    else
+        % number of xpr samples for each pair
+        Kmat = repmat(sum(Z,2),[1 length(ixc)]);
+        S = 12*S./(Kmat.*(Kmat+1)) - 3*(Kmat+1);
+        % With Statistics Toolbox we can adjust for ties
+        if flag==0
+            adjust = 1 - 2*repmat(tieadj',[1 size(S,2)])./(Kmat.^3-Kmat);
+            S = S./adjust;
+        end
+    end
+    
+    % degrees of freedom is number of groups minus 1
+    df = -ones(size(S,1),size(S,2));
     for k=0:nC
-        Ne{k+1} = Z*Ic{k+1}(ixc,:)';
+        df = df + spones(Ne{k+1});
     end
-end
-
-% sum of (mean rank)^2 x number of elements in each group for all pairs of
-% rows 
-S = zeros(size(D,1),size(C,1));
-for k=0:nC
-   mR = ((R*Ic{k+1}(ixc,:)').^2)./Ne{k+1};
-   % any NaN result from 0/0 for empty groups, set them to 0 to remove from sum
-   mR(isnan(mR)) = 0;
-   % sum
-   S = S + mR;
-end
-
-% Kruskal-Wallis test statistic
-if missD==0
-    S = 12*S./(K.*(K+1)) - 3*(K+1);
-    % With Statistics Toolbox we can adjust for ties
-    if flag==0
-        adjust = 1 - 2*tieadj'./(K^3-K);
-        S = S./repmat(adjust,[1 size(S,2)]);
+    
+    % find pairs above cutoff
+    bool = S>=Scut(1) & df==1;
+    for k=2:nC
+        bool = bool | (S>=Scut(k) & df==k);
     end
+    [I,J] = find(bool);
+    ind = sub2ind(size(S),I,J);
+    S = S(ind);
+    df = df(ind);
+    J = ixc(J); % back to original index
+    if size(I,1)==1
+        I = I';
+        S = S';
+        df = df';
+    end
+
 else
-    % number of xpr samples for each pair
-    Kmat = repmat(sum(Z,2),[1 length(ixc)]); 
-    S = 12*S./(Kmat.*(Kmat+1)) - 3*(Kmat+1);
-    % With Statistics Toolbox we can adjust for ties
-    if flag==0
-        adjust = 1 - 2*repmat(tieadj',[1 size(S,2)])./(Kmat.^3-Kmat);
-        S = S./adjust;
-    end
-end
-
-% degrees of freedom is number of groups minus 1
-df = -ones(size(S,1),size(S,2));
-for k=0:nC
-   df = df + spones(Ne{k+1}); 
-end
-
-% find pairs above cutoff
-bool = S>=Scut(1) & df==1;
-for k=2:nC
-   bool = bool | (S>=Scut(k) & df==k);
-end
-[I,J] = find(bool);
-ind = sub2ind(size(S),I,J);
-S = S(ind);
-df = df(ind);
-J = ixc(J); % back to original index
-if size(I,1)==1
-    I = I';
-    S = S';
-    df = df';
+    % make empty arrays
+    I = [];
+    J = [];
+    S = [];
+    df = [];
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -162,9 +173,9 @@ for k=1:size(Un,1)
         error('this cannot be true')
     end
     if flag==0
-        [Inew,Jnew,Snew,dfnew] = kruXstatistic(Dnew,Cnew,Pcut);
+        [Inew,Jnew,~,Snew,dfnew] = kruX(Dnew,Cnew,Pcut);
     else
-        [Inew,Jnew,Snew,dfnew] = kruXstatistic(Dnew,Cnew,Scut,1);
+        [Inew,Jnew,Snew,dfnew] = kruX(Dnew,Cnew,Scut,1);
     end
     % append results
     I = [I;Inew];
