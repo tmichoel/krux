@@ -165,7 +165,8 @@ ixn = find(sum(In,2)>0);
 % do calculation for each unique row
 for k=1:size(Un,1)
     % new markers
-    Cnew =  C(ixn(Bn==k), Un(k,:)==0);
+    mloc = ixn(Bn==k);
+    Cnew =  C(mloc, Un(k,:)==0);
     % new data
     Dnew = D(:, Un(k,:)==0);
     % recursive call
@@ -177,6 +178,8 @@ for k=1:size(Un,1)
     else
         [Inew,Jnew,Snew,dfnew] = kruX(Dnew,Cnew,Scut,1);
     end
+    % change back to original index
+    Jnew = mloc(Jnew);
     % append results
     I = [I;Inew];
     J = [J;Jnew];
