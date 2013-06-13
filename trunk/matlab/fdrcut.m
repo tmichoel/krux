@@ -1,8 +1,8 @@
 function pcut = fdrcut(preal,fdr,fdrcut)
 % FDRCUT - P-value cutoff at given FDR level
 % FDRCUT returns the P-value cutoff for a given FDR cutoff. Because the
-% output of the "fdrvec" is not monotonic, especially at very low P-values,
-% due to discrete jumps, we define the FDR cutoff as
+% output of the "fdrvec" can be erratic at very low P-values due to
+% discrete jumps, we define the P-value cutoff as 
 %
 %   pcut = max(preal(fdr<=fdrcut));
 %
