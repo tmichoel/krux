@@ -21,6 +21,7 @@ function f = fdrvec(preal,prand)
 N = length(preal);
 
 if ~iscell(prand) && size(prand,2)==1
+    
     % work on sorted data
     [p1,I] = sort(preal,'ascend');
     p2 = sort(prand,'ascend');
@@ -36,16 +37,21 @@ if ~iscell(prand) && size(prand,2)==1
     % permute back to original index
     [~,Iinv] = sort(I,'ascend'); % inverse permutation
     f = f(Iinv);
+
 elseif iscell(prand) % random data in cell array
+
     fset = zeros(N,length(prand));
     for k=1:length(prand)
        fset(:,k) = fdrvec(preal,prand{k}); 
     end
     f = mean(fset,2);
+    
 else % random data as column vectors in a matrix
+    
     fset = zeros(N,size(prand,2));
     for k=1:size(prand,2)
        fset(:,k) = fdrvec(preal,prand(:,k)); 
     end
     f = mean(fset,2);
+    
 end
