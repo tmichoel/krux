@@ -233,7 +233,7 @@ t1by1avg = mean(t1by1)
 % So in this particular case, kruX is about
 t1by1avg/tkruXavg
 %%
-% faster than performing all tests one-by-one.
+% times faster than performing all tests one-by-one.
 
 %% Goodbye
 % May kruX help you get through the crux of your eQTL data analysis and 
