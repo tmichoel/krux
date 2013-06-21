@@ -1,0 +1,486 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>kruX Tutorial</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-06-21"><meta name="DC.source" content="kruX_tutorial_matlab.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>kruX Tutorial</h1><!--introduction--><p>This webpage and its associated m-script (<tt>kruX_tutorial_matlab.m</tt>) illustrate the various features of kruX. Please make sure that you've added the folder were you downloaded the kruX source code to your <a href="http://www.mathworks.co.uk/help/matlab/ref/addpath.html">Matlab search path</a> before you attempt to run any of the code that follows.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Data import</a></li><li><a href="#4">Testing all marker - gene combinations at once</a></li><li><a href="#10">Sliced data</a></li><li><a href="#15">Empirical FDR correction</a></li><li><a href="#24">kruX is exact</a></li><li><a href="#27">kruX handles missing data</a></li><li><a href="#32">kruX is fast</a></li><li><a href="#37">Goodbye</a></li></ul></div><h2>Data import<a name="1"></a></h2><p>We use Matlab's built-in function to import data. This can also be done via the GUI if you prefer.</p><p>Gene expression data</p><pre class="codeinput">dat = importdata(<span class="string">'kruX_testData_expression.txt'</span>);
+expression = dat.data;
+samples = dat.textdata(1,2:end);
+genes = dat.textdata(2:end,1);
+</pre><p>Marker genotype data</p><pre class="codeinput">dat = importdata(<span class="string">'kruX_testData_genotype.txt'</span>);
+genotype = dat.data;
+samples = dat.textdata(1,2:end);
+markers = dat.textdata(2:end,1);
+clear <span class="string">dat</span>;
+</pre><h2>Testing all marker - gene combinations at once<a name="4"></a></h2><p>Our test data set is small enough that all combinations fit in memory. Let's get all pairs with P-value below 0.01:</p><pre class="codeinput">Pcut = 1e-2;
+[I,J,P,S,df] = kruX(expression,genotype,Pcut);
+</pre><p>The previous command assumes that the Statistics Toolbox is installed. If this isn't the case, we can still compute the test statistics and P-values, but no correction for ties in the expression data will be made. To call kruX in this mode, cutoffs on the chi-square test statistic for all relevant degrees of freedom need to be supplied instead of a P-value cutoff. The cutoff corresponding to P&lt;=0.01 for markers with 1 degree of freedom is</p><pre class="codeinput">Scut = chi2inv(1-Pcut,1);
+</pre><p>(but note that chi2inv itself is part of the Statistics Toolbox so without it, you'll have to look up the cutoff values somewhere else).</p><pre class="codeinput">[I2,J2,P2,S2,df2] = kruX(expression,genotype,Scut);
+</pre><p>Without the Statistics Toolbox we didn't correct for ties in the expression data. Does this make a big difference?</p><pre class="codeinput">[Ic,ix1,ix2] = intersect([I,J],[I2,J2],<span class="string">'rows'</span>);
+</pre><p>99.86% of pairs are common and the statistics computed with either method differ by not more than 1.8% (for this particular dataset)</p><pre class="codeinput">max(abs(S(ix1)-S2(ix2))./S(ix1))
+</pre><pre class="codeoutput">
+ans =
+
+    0.0179
+
+</pre><p>Or in a figure:</p><pre class="codeinput">scatter(S(ix1(1:100:end)),S2(ix2(1:100:end)));
+xlabel(<span class="string">'KW test statistics with corrections for tied data.'</span>);
+ylabel(<span class="string">'KW test statistics without corrections for tied data.'</span>);
+grid
+</pre><img vspace="5" hspace="5" src="kruX_tutorial_matlab_01.png" alt=""> <h2>Sliced data<a name="10"></a></h2><p>For dense genome-wide data in human or other higher organisms, the number of markers and expression traits is usually too large to run kruX in one go (kruX needs to fit a matrix of size (number of markers) x (number of genes) into memory).  The solution is to slice the genotype data into manageable chunks. To let kruX do all the slicing for you, use the call</p><pre class="codeinput">slice = 100;
+[I3,J3,P3,S3,df3] = kruX(expression,genotype,Pcut,slice);
+</pre><p>The end result is of course the same</p><pre class="codeinput">norm(S3-S)
+</pre><pre class="codeoutput">
+ans =
+
+     0
+
+</pre><p>In this case the genotype data is divided in chunks of 'slice' markers and the statistics for each chunk are computed serially. For big datasets it will be much faster to run separate chunks in parallel. To compute the statistics for one particular data chunch of size 'slice' starting at marker 'start', use</p><pre class="codeinput">slice = 100;
+start = 701;
+[I4,J4,P4,S4,df4] = kruX(expression,genotype,Pcut,slice,start);
+</pre><p>Again producing the same result:</p><pre class="codeinput">norm(S4-S(J&gt;=start &amp; J&lt;start+slice))
+</pre><pre class="codeoutput">
+ans =
+
+     0
+
+</pre><p>You will have to write your own wrapper to launch different slices on different processors and combine their outputs.</p><h2>Empirical FDR correction<a name="15"></a></h2><p>To assess the statistical significance of our findings, we need to correct for multiple testing. To account for the myriad of correlations in genome-wide data, corecting via an empirical null distribution is the way to go. We will calculate a null distribution from 10 random permutations of the data.</p><pre class="codeinput">nrand = 10;
+Prand = cell(nrand,1);
+Irand = cell(nrand,1);
+Jrand = cell(nrand,1);
+<span class="keyword">for</span> k=1:nrand
+    per = randperm(size(expression,2));
+    [Irand{k},Jrand{k},Prand{k}] = kruX(expression(:,per),genotype,Pcut);
+<span class="keyword">end</span>
+</pre><p>We can use the random results to convert the original P-values to empirical False Discover Rates (FDR). For a given Px, the FDR is defined as the average number of associations with P&lt;=Px in the random data, divided by the number of associations with P&lt;=Px in the real data. A function to do this calculation is included for your convenience:</p><pre class="codeinput">FDR = fdrvec(P,Prand);
+</pre><p>How do FDR values relate to P-values in this dataset?</p><pre class="codeinput">scatter(P(1:100:end),FDR(1:100:end));
+xlabel(<span class="string">'P-value'</span>);
+ylabel(<span class="string">'FDR value'</span>);
+grid;
+</pre><img vspace="5" hspace="5" src="kruX_tutorial_matlab_02.png" alt=""> <p>We also provide a function to determine the P-value cutoff at a given FDR level:</p><pre class="codeinput">FDRcut = 0.10;
+Pcut2 = fdrcut(P,FDR,FDRcut)
+</pre><pre class="codeoutput">
+Pcut2 =
+
+   9.0516e-04
+
+</pre><p>Sometimes it is preferred to consider cis-pairs only (i.e. marker-gene pairs within a fixed genomic distance of each other). A function is provided to filter the relevant P-values if you have such a list of cis-pairs.</p><p>Let's create an artificial list of cis-pairs with for each gene its best marker</p><pre class="codeinput">[~,t] = sort(P);
+[Icis,m] = unique(I(t),<span class="string">'first'</span>);
+Jcis = J(t(m));
+</pre><p>Get the real and random P-values for the cis-pairs</p><pre class="codeinput">[Icis0,Jcis0,Pcis] = cisselect(Icis,Jcis,I,J,P);
+Pcisrand = cell(nrand,1);
+<span class="keyword">for</span> k=1:nrand
+    [~,~,Pcisrand{k}] = cisselect(Icis,Jcis,Irand{k},Jrand{k},Prand{k});
+<span class="keyword">end</span>
+</pre><p>FDR correction:</p><pre class="codeinput">FDRcis = fdrvec(Pcis,Pcisrand);
+</pre><p>Now of course the same P-value leads to a much lower FDR value than before:</p><pre class="codeinput">scatter(Pcis,FDRcis);
+xlabel(<span class="string">'cis-P-value'</span>);
+ylabel(<span class="string">'cis-FDR value'</span>);
+grid;
+</pre><img vspace="5" hspace="5" src="kruX_tutorial_matlab_03.png" alt=""> <h2>kruX is exact<a name="24"></a></h2><p>With the Statistics Toolbox installed, kruX returns the <b>exact</b> P-value for the Kruskal-Wallis test statistic.</p><p>Let's select 1000 pairs at random from our previous set and compute their Kruskal-Wallis P-value using the built-in function:</p><pre class="codeinput">numpairs = 1000;
+t = randi(length(P),numpairs,1);
+Pkw = zeros(numpairs,1);
+Skw = zeros(numpairs,1);
+<span class="keyword">for</span> k=1:numpairs
+    [Pkw(k),tab] = kruskalwallis(expression(I(t(k)),:),genotype(J(t(k)),:),<span class="string">'off'</span>);
+    Skw(k) = tab{2,5};
+<span class="keyword">end</span>
+</pre><p>The relative difference between both methods is a bit more than machine precision:</p><pre class="codeinput">[max(abs((Pkw-P(t))./Pkw)) max(abs((Skw-S(t))./Skw))]
+</pre><pre class="codeoutput">
+ans =
+
+   1.0e-13 *
+
+    0.5090    0.1253
+
+</pre><h2>kruX handles missing data<a name="27"></a></h2><p>kruX can deal with missing data in both expression and genotype data. In expression data, missing values should be indicated by NaN's; in genotype data, they can be indicated by NaN's or -1. Let's set some random entries in the data to missing values; for the genotyope data we limit the number of markers with missing data to keep computation time reasonable.</p><pre class="codeinput">mfreq = 0.01;
+nmark = 100;
+nanE = logical(binornd(1,mfreq,size(expression)));
+expression_md = expression;
+expression_md(nanE) = nan;
+nanG = false(size(genotype));
+nanG(randi(numm,nmark,1),:) = logical(binornd(1,mfreq,nmark,size(genotype,2)));
+genotype_md = genotype;
+genotype_md(nanG) = nan;
+</pre><p>Missing expression data has no effect on execution time:</p><pre class="codeinput">tic
+kruX(expression_md,genotype,Pcut);
+toc
+</pre><pre class="codeoutput">Elapsed time is 1.466368 seconds.
+</pre><p>but a small number of missing genotype data already leads to a sharp increase in computational cost:</p><pre class="codeinput">tic
+[Imd,Jmd,Pmd,Smd,dfmd] = kruX(expression_md,genotype_md,Pcut);
+toc
+</pre><pre class="codeoutput">Elapsed time is 9.554019 seconds.
+</pre><p>Let's compare to the built-in function for some of the markers with missing values:</p><pre class="codeinput">tf = ismember(Jmd,find(sum(isnan(genotype_md),2)));
+Imd2 = Imd(tf);
+Jmd2 = Jmd(tf);
+Pmd2 = Pmd(tf);
+Smd2 = Smd(tf);
+t = randi(length(Imd2),numpairs,1);
+Pkw = zeros(numpairs,1);
+Skw = zeros(numpairs,1);
+<span class="keyword">for</span> k=1:numpairs
+    [Pkw(k),tab] = kruskalwallis(expression_md(Imd2(t(k)),:),genotype_md(Jmd2(t(k)),:),<span class="string">'off'</span>);
+    Skw(k) = tab{2,5};
+<span class="keyword">end</span>
+</pre><p>The result is still exact:</p><pre class="codeinput">[max(abs((Pkw-Pmd2(t))./Pkw)) max(abs((Skw-Smd2(t))./Skw))]
+</pre><pre class="codeoutput">
+ans =
+
+   1.0e-13 *
+
+    0.4869    0.1036
+
+</pre><h2>kruX is fast<a name="32"></a></h2><p>If you hadn't already noticed by now, kruX is fast. For out test data the P-values for all 4 million pairs actually fit in memory. How long does it take to compute them?</p><pre class="codeinput">tic;
+[Iall,Jall,Pall,Sall,dfall] = kruX(expression,genotype,1.0);
+tkruX = toc;
+</pre><p>The average time per test is</p><pre class="codeinput">numg = size(expression,1);
+numm = size(markers,1);
+tkruXavg = tkruX/(numg*numm)
+</pre><pre class="codeoutput">
+tkruXavg =
+
+   9.5761e-07
+
+</pre><p>Let's average the built-in function over 1000 tests:</p><pre class="codeinput">t1by1 = zeros(numpairs,1);
+t = randi(length(P),numpairs,1);
+<span class="keyword">for</span> k=1:numpairs
+    tic
+    [Pkw(k),tab] = kruskalwallis(expression(I(t(k)),:),genotype(J(t(k)),:),<span class="string">'off'</span>);
+    t1by1(k) = toc;
+<span class="keyword">end</span>
+t1by1avg = mean(t1by1)
+</pre><pre class="codeoutput">
+t1by1avg =
+
+    0.0013
+
+</pre><p>So in this particular case, kruX is about</p><pre class="codeinput">t1by1avg/tkruXavg
+</pre><pre class="codeoutput">
+ans =
+
+   1.4008e+03
+
+</pre><p>faster than performing all tests one-by-one.</p><h2>Goodbye<a name="37"></a></h2><p>May kruX help you get through the crux of your eQTL data analysis and <a href="http://www.roslin.ed.ac.uk/tom-michoel/contact-details/">do get in touch</a> if you need any further help.</p><p>
+<p style="text-align:right">
+The kruX Team<br/>
+<i>Jianlong Qi</i>,
+<i>Hassan Foroughi Asl</i> and
+<i>Tom Michoel</i>
+</p>
+</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% kruX Tutorial
+% This webpage and its associated m-script (|kruX_tutorial_matlab.m|) illustrate the various features
+% of kruX. Please make sure that you've added the folder were you
+% downloaded the kruX source code to your 
+% <http://www.mathworks.co.uk/help/matlab/ref/addpath.html Matlab search path>
+% before you attempt to run any of the code that follows.
+
+%% Data import
+% We use Matlab's built-in function to import data. This can also be done
+% via the GUI if you prefer.
+%%
+% Gene expression data
+dat = importdata('kruX_testData_expression.txt');
+expression = dat.data;
+samples = dat.textdata(1,2:end);
+genes = dat.textdata(2:end,1);
+%%
+% Marker genotype data
+dat = importdata('kruX_testData_genotype.txt');
+genotype = dat.data;
+samples = dat.textdata(1,2:end);
+markers = dat.textdata(2:end,1);
+clear dat;
+
+%% Testing all marker - gene combinations at once
+% Our test data set is small enough that all combinations fit in memory.
+% Let's get all pairs with P-value below 0.01:
+Pcut = 1e-2;
+[I,J,P,S,df] = kruX(expression,genotype,Pcut);
+%%
+% The previous command assumes that the Statistics Toolbox is installed. If
+% this isn't the case, we can still compute the test statistics and
+% P-values, but no correction for ties in the expression data will be made.
+% To call kruX in this mode, cutoffs on the chi-square test statistic for
+% all relevant degrees of freedom need to be supplied instead of a P-value
+% cutoff. The cutoff corresponding to P<=0.01 for markers with 1 degree of
+% freedom is 
+Scut = chi2inv(1-Pcut,1);
+%%
+% (but note that chi2inv itself is part of the Statistics Toolbox so
+% without it, you'll have to look up the cutoff values somewhere else).
+[I2,J2,P2,S2,df2] = kruX(expression,genotype,Scut);
+%% 
+% Without the Statistics Toolbox we didn't correct for ties in the
+% expression data. Does this make a big difference?
+[Ic,ix1,ix2] = intersect([I,J],[I2,J2],'rows');
+%%
+% 99.86% of pairs are common and the statistics computed with either method
+% differ by not more than 1.8% (for this particular dataset)
+max(abs(S(ix1)-S2(ix2))./S(ix1))
+%%
+% Or in a figure:
+scatter(S(ix1(1:100:end)),S2(ix2(1:100:end)));
+xlabel('KW test statistics with corrections for tied data.');
+ylabel('KW test statistics without corrections for tied data.');
+grid
+
+%% Sliced data
+% For dense genome-wide data in human or other higher organisms, the number
+% of markers and expression traits is usually too large to run kruX in one
+% go (kruX needs to fit a matrix of size (number of markers) x (number of
+% genes) into memory).  The solution is to slice the genotype data into
+% manageable chunks. To let kruX do all the slicing for you, use the call  
+slice = 100;
+[I3,J3,P3,S3,df3] = kruX(expression,genotype,Pcut,slice);
+%%
+% The end result is of course the same
+norm(S3-S)
+%%
+% In this case the genotype data is divided in chunks of 'slice' markers
+% and the statistics for each chunk are computed serially. For big datasets
+% it will be much faster to run separate chunks in parallel. To compute
+% the statistics for one particular data chunch of size 'slice' starting at
+% marker 'start', use  
+slice = 100;
+start = 701;
+[I4,J4,P4,S4,df4] = kruX(expression,genotype,Pcut,slice,start);
+%%
+% Again producing the same result:
+norm(S4-S(J>=start & J<start+slice))
+%%
+% You will have to write your own wrapper to launch different slices on
+% different processors and combine their outputs.
+
+%% Empirical FDR correction
+% To assess the statistical significance of our findings, we need to
+% correct for multiple testing. To account for the myriad of correlations
+% in genome-wide data, corecting via an empirical null distribution is the
+% way to go. We will calculate a null distribution from 10 random
+% permutations of the data.
+nrand = 10;
+Prand = cell(nrand,1);
+Irand = cell(nrand,1);
+Jrand = cell(nrand,1);
+for k=1:nrand
+    per = randperm(size(expression,2));
+    [Irand{k},Jrand{k},Prand{k}] = kruX(expression(:,per),genotype,Pcut);
+end
+%%
+% We can use the random results to convert the original P-values to
+% empirical False Discover Rates (FDR). For a given Px, the FDR is defined
+% as the average number of associations with P<=Px in the random data,
+% divided by the number of associations with P<=Px in the real data. A
+% function to do this calculation is included for your convenience:
+FDR = fdrvec(P,Prand);
+%% 
+% How do FDR values relate to P-values in this dataset?
+scatter(P(1:100:end),FDR(1:100:end));
+xlabel('P-value');
+ylabel('FDR value');
+grid;
+%%
+% We also provide a function to determine the P-value cutoff at a given FDR
+% level:
+FDRcut = 0.10;
+Pcut2 = fdrcut(P,FDR,FDRcut)
+%%
+% Sometimes it is preferred to consider cis-pairs only (i.e. marker-gene
+% pairs within a fixed genomic distance of each other). A function is
+% provided to filter the relevant P-values if you have such a list of
+% cis-pairs.
+%%
+% Let's create an artificial list of cis-pairs with for each gene its best
+% marker
+[~,t] = sort(P);
+[Icis,m] = unique(I(t),'first');
+Jcis = J(t(m));
+%%
+% Get the real and random P-values for the cis-pairs
+[Icis0,Jcis0,Pcis] = cisselect(Icis,Jcis,I,J,P);
+Pcisrand = cell(nrand,1);
+for k=1:nrand
+    [~,~,Pcisrand{k}] = cisselect(Icis,Jcis,Irand{k},Jrand{k},Prand{k});
+end
+%%
+% FDR correction:
+FDRcis = fdrvec(Pcis,Pcisrand);
+%%
+% Now of course the same P-value leads to a much lower FDR value than
+% before:
+scatter(Pcis,FDRcis);
+xlabel('cis-P-value');
+ylabel('cis-FDR value');
+grid;
+
+%% kruX is exact
+% With the Statistics Toolbox installed, kruX returns the *exact* P-value
+% for the Kruskal-Wallis test statistic.
+%%
+% Let's select 1000 pairs at random from our previous set and compute their
+% Kruskal-Wallis P-value using the built-in function:
+numpairs = 1000;
+t = randi(length(P),numpairs,1);
+Pkw = zeros(numpairs,1);
+Skw = zeros(numpairs,1);
+for k=1:numpairs
+    [Pkw(k),tab] = kruskalwallis(expression(I(t(k)),:),genotype(J(t(k)),:),'off');
+    Skw(k) = tab{2,5};
+end
+%%
+% The relative difference between both methods is a bit more than machine
+% precision:
+[max(abs((Pkw-P(t))./Pkw)) max(abs((Skw-S(t))./Skw))]
+
+%% kruX handles missing data
+% kruX can deal with missing data in both expression and genotype data. In
+% expression data, missing values should be indicated by NaN's; in genotype
+% data, they can be indicated by NaN's or -1. Let's set some random entries
+% in the data to missing values; for the genotyope data we limit the number
+% of markers with missing data to keep computation time reasonable.
+mfreq = 0.01;
+nmark = 100;
+nanE = logical(binornd(1,mfreq,size(expression)));
+expression_md = expression;
+expression_md(nanE) = nan;
+nanG = false(size(genotype));
+nanG(randi(numm,nmark,1),:) = logical(binornd(1,mfreq,nmark,size(genotype,2)));
+genotype_md = genotype;
+genotype_md(nanG) = nan;
+%%
+% Missing expression data has no effect on execution time:
+tic
+kruX(expression_md,genotype,Pcut);
+toc
+%%
+% but a small number of missing genotype data already leads to a sharp
+% increase in computational cost:
+tic
+[Imd,Jmd,Pmd,Smd,dfmd] = kruX(expression_md,genotype_md,Pcut);
+toc
+%%
+% Let's compare to the built-in function for some of the markers with
+% missing values:
+tf = ismember(Jmd,find(sum(isnan(genotype_md),2)));
+Imd2 = Imd(tf);
+Jmd2 = Jmd(tf);
+Pmd2 = Pmd(tf);
+Smd2 = Smd(tf);
+t = randi(length(Imd2),numpairs,1);
+Pkw = zeros(numpairs,1);
+Skw = zeros(numpairs,1);
+for k=1:numpairs
+    [Pkw(k),tab] = kruskalwallis(expression_md(Imd2(t(k)),:),genotype_md(Jmd2(t(k)),:),'off');
+    Skw(k) = tab{2,5};
+end
+%%
+% The result is still exact:
+[max(abs((Pkw-Pmd2(t))./Pkw)) max(abs((Skw-Smd2(t))./Skw))]
+
+%% kruX is fast
+% If you hadn't already noticed by now, kruX is fast. For out test data the
+% P-values for all 4 million pairs actually fit in memory. How long does it
+% take to compute them?  
+tic;
+[Iall,Jall,Pall,Sall,dfall] = kruX(expression,genotype,1.0); 
+tkruX = toc;
+%%
+% The average time per test is
+numg = size(expression,1);
+numm = size(markers,1);
+tkruXavg = tkruX/(numg*numm)
+%%
+% Let's average the built-in function over 1000 tests:
+t1by1 = zeros(numpairs,1);
+t = randi(length(P),numpairs,1);
+for k=1:numpairs
+    tic
+    [Pkw(k),tab] = kruskalwallis(expression(I(t(k)),:),genotype(J(t(k)),:),'off');
+    t1by1(k) = toc;
+end
+t1by1avg = mean(t1by1)
+%%
+% So in this particular case, kruX is about
+t1by1avg/tkruXavg
+%%
+% faster than performing all tests one-by-one.
+
+%% Goodbye
+% May kruX help you get through the crux of your eQTL data analysis and 
+% <http://www.roslin.ed.ac.uk/tom-michoel/contact-details/ do get
+% in touch> if you need any further help.
+%
+% <html>
+% <p style="text-align:right">
+% The kruX Team<br/>
+% <i>Jianlong Qi</i>,
+% <i>Hassan Foroughi Asl</i> and
+% <i>Tom Michoel</i>
+% </p>
+% </html>
+%
+##### SOURCE END #####
+--></body></html>
