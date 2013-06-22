@@ -6,21 +6,30 @@
 % before you attempt to run any of the code that follows.
 
 %% Data import
-% We use Matlab's built-in function to import data. This can also be done
-% via the GUI if you prefer.
+% kruX expects expression and genotype data in the form of numeric arrays
+% where rows represent genes (or more generally any kind of continuous
+% variables) or genetic markers (or more generally any kind of
+% discrete grouping variables), and columns represent samples. Needless to
+% say, it is imperative that samples are ordered identically in both
+% expression and genotype data matrices. A set of test data in plain text
+% format is included with kruX. We use Matlab's built-in function to import
+% these data (this can also be done via the GUI if you prefer):
 %%
-% Gene expression data
+% Gene expression data:
 dat = importdata('kruX_testData_expression.txt');
 expression = dat.data;
-samples = dat.textdata(1,2:end);
+samples_expr = dat.textdata(1,2:end);
 genes = dat.textdata(2:end,1);
 %%
-% Marker genotype data
+% Marker genotype data:
 dat = importdata('kruX_testData_genotype.txt');
 genotype = dat.data;
-samples = dat.textdata(1,2:end);
+samples_geno = dat.textdata(1,2:end);
 markers = dat.textdata(2:end,1);
 clear dat;
+%%
+% Are the sample sets identical?
+sum(~strcmp(samples_expr,samples_geno))
 
 %% Testing all marker - gene combinations at once
 % Our test data set is small enough that all combinations fit in memory.
@@ -54,29 +63,32 @@ scatter(S(ix1(1:100:end)),S2(ix2(1:100:end)));
 xlabel('KW test statistics with corrections for tied data.');
 ylabel('KW test statistics without corrections for tied data.');
 grid
+%%
+% If your expression data consists of discrete or ordinal data, correcting
+% for ties will evidently become essential.
 
 %% Sliced data
 % For dense genome-wide data in human or other higher organisms, the number
 % of markers and expression traits is usually too large to run kruX in one
 % go (kruX needs to fit a matrix of size (number of markers) x (number of
 % genes) into memory).  The solution is to slice the genotype data into
-% manageable chunks. To let kruX do all the slicing for you, use the call  
+% manageable chunks. We can tell kruX to divide the genotype data into
+% chunks of markers of size 'slice' and compute the statistics for each
+% chunk serially:
 slice = 100;
 [I3,J3,P3,S3,df3] = kruX(expression,genotype,Pcut,slice);
 %%
-% The end result is of course the same
+% The end result is of course the same as before:
 norm(S3-S)
 %%
-% In this case the genotype data is divided in chunks of 'slice' markers
-% and the statistics for each chunk are computed serially. For big datasets
-% it will be much faster to run separate chunks in parallel. To compute
-% the statistics for one particular data chunch of size 'slice' starting at
-% marker 'start', use  
+% For big datasets it will be much faster to run separate chunks in
+% parallel. To compute the statistics for one particular data chunk of
+% size 'slice' starting at marker 'start', use  
 slice = 100;
 start = 701;
 [I4,J4,P4,S4,df4] = kruX(expression,genotype,Pcut,slice,start);
 %%
-% Again producing the same result:
+% Again producing the same result as before:
 norm(S4-S(J>=start & J<start+slice))
 %%
 % You will have to write your own wrapper to launch different slices on
@@ -142,6 +154,9 @@ scatter(Pcis,FDRcis);
 xlabel('cis-P-value');
 ylabel('cis-FDR value');
 grid;
+%%
+% It is no coincidence that the slope in this figure is pretty much equal
+% to one.
 
 %% kruX is exact
 % With the Statistics Toolbox installed, kruX returns the *exact* P-value
@@ -174,7 +189,7 @@ nanE = logical(binornd(1,mfreq,size(expression)));
 expression_md = expression;
 expression_md(nanE) = nan;
 nanG = false(size(genotype));
-nanG(randi(numm,nmark,1),:) = logical(binornd(1,mfreq,nmark,size(genotype,2)));
+nanG(randi(size(genotype,1),nmark,1),:) = logical(binornd(1,mfreq,nmark,size(genotype,2)));
 genotype_md = genotype;
 genotype_md(nanG) = nan;
 %%
@@ -206,9 +221,13 @@ end
 %%
 % The result is still exact:
 [max(abs((Pkw-Pmd2(t))./Pkw)) max(abs((Skw-Smd2(t))./Skw))]
+%%
+% Beware that kruX treats -1 in genotype data as missing values to be
+% consistent with common genotype calling software, but that the built-in
+% kruskalwallis function will treat -1's as a separate group.
 
 %% kruX is fast
-% If you hadn't already noticed by now, kruX is fast. For out test data the
+% If you hadn't already noticed by now, kruX is fast. For our test data the
 % P-values for all 4 million pairs actually fit in memory. How long does it
 % take to compute them?  
 tic;
@@ -236,7 +255,7 @@ t1by1avg/tkruXavg
 % times faster than performing all tests one-by-one.
 
 %% Goodbye
-% May kruX help you get through the crux of your eQTL data analysis and 
+% May kruX help you solve the crux of your eQTL data analysis and 
 % <http://www.roslin.ed.ac.uk/tom-michoel/contact-details/ do get
 % in touch> if you need any further help.
 %
