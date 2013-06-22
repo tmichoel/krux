@@ -27,7 +27,7 @@ To use kruX, it needs to be in the Matlab search path. This can be accomplished 
 >> addpath('<installation dir>/kruX/matlab/');
 }}}
 
-on the Matlab prompt, where <installation dir> is the location where kruX was checked out. See [http://www.mathworks.co.uk/help/matlab/ref/addpath.html here] for more help on setting the search path. You can now change into the "kruX/test" directory and go [http://www.mathworks.co.uk/help/matlab/matlab_prog/run-sections-of-programs.html step by step] through the tutorial script |kruX_tutorial_matlab.m|, the output of which is described on this [https://krux.googlecode.com/svn/trunk/html/kruX_tutorial_matlab.html tutorial page].
+on the Matlab prompt, where <installation dir> is the location where kruX was checked out. See [http://www.mathworks.co.uk/help/matlab/ref/addpath.html here] for more help on setting the search path. You can now change into the "kruX/test" directory and go [http://www.mathworks.co.uk/help/matlab/matlab_prog/run-sections-of-programs.html step by step] through the tutorial script `kruX_tutorial_matlab.m`, the output of which is described on this [https://krux.googlecode.com/svn/trunk/html/kruX_tutorial_matlab.html tutorial page].
 
 
 
