@@ -5,7 +5,9 @@
 
 == Subversion ==
 
-The recommended way to install kruX and keep up to date with any future versions is via the subversion system. If you are unfamiliar with this, see [http://subversion.apache.org/packages.html here] for a list of relevant software clients. Detailed instructions for how to checkout kruX can be found under the [https://code.google.com/p/krux/source/checkout Source] tab. If you prefer not to use subversion, we provide prepackaged files for download as well (see below).
+The recommended way to install kruX and keep up to date with any future versions is via the subversion system. If you are unfamiliar with this, see [http://subversion.apache.org/packages.html here] for a list of relevant software clients. Detailed instructions for how to checkout kruX can be found under the [https://code.google.com/p/krux/source/checkout Source] tab. 
+
+If you are unable to install kruX via subversion, you can download a frozen version from [http:// ...] (link not working yet).
 
 After checking out kruX via subversion, there will be a new directory called "kruX", with subdirectories
 
@@ -27,8 +29,7 @@ To use kruX, it needs to be in the Matlab search path. This can be accomplished 
 >> addpath('<installation dir>/kruX/matlab/');
 }}}
 
-on the Matlab prompt, where <installation dir> is the location where kruX was checked out. See [http://www.mathworks.co.uk/help/matlab/ref/addpath.html here] for more help on setting the search path. You can now change into the "kruX/test" directory and go [http://www.mathworks.co.uk/help/matlab/matlab_prog/run-sections-of-programs.html step by step] through the tutorial script `kruX_tutorial_matlab.m`, the output of which is described on this [https://krux.googlecode.com/svn/trunk/html/kruX_tutorial_matlab.html tutorial page].
-
+on the Matlab prompt, where <installation dir> is the location where kruX was checked out. See [http://www.mathworks.co.uk/help/matlab/ref/addpath.html here] for more help on setting the search path. You can now change into the "kruX/test" directory and go [http://www.mathworks.co.uk/help/matlab/matlab_prog/run-sections-of-programs.html step by step] through the test script `kruX_tutorial_matlab.m`, the output of which is described on this [https://krux.googlecode.com/svn/trunk/html/kruX_tutorial_matlab.html tutorial page].
 
 
 == R ==
