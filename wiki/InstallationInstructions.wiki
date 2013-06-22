@@ -7,7 +7,11 @@
 
 The recommended way to install kruX and keep up to date with any future versions is via the subversion system. If you are unfamiliar with this, see [http://subversion.apache.org/packages.html here] for a list of relevant software clients. Detailed instructions for how to checkout kruX can be found under the [https://code.google.com/p/krux/source/checkout Source] tab. If you prefer not to use subversion, we provide prepackaged files for download as well (see below).
 
+After checking out kruX via subversion, there will be a new directory
+
 == Matlab ==
+
+
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
