@@ -3,6 +3,9 @@
 
 = Download and installation instructions =
 
+== Subversion ==
+
+The recommended way to install kruX is via the subversion system. If you are unfamiliar with this, see [http://subversion.apache.org/packages.html here] for a list of relevant software clients. Detailed instructions for how to checkout kruX can be found under the [https://code.google.com/p/krux/source/checkout Source] tab.
 
 == Matlab ==
 
