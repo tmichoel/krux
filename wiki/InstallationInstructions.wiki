@@ -17,14 +17,19 @@ kruX/python/
 kruX/test/
 }}}
 
+The "html" directory contains documentation files, the "test" directory contains test data and scripts and the three others contain their respective kruX implementations.
+
 == Matlab ==
 
+To use kruX, it needs to be in the Matlab search path. This can be accomplished by executing:
+
+{{{
+>> addpath('<installation dir>/kruX/matlab/');
+}}}
+
+on the Matlab prompt, where <installation dir> is the location where kruX was checked out. See [http://www.mathworks.co.uk/help/matlab/ref/addpath.html here] for more help on setting the search path. You can now change into the "kruX/test" directory and go [http://www.mathworks.co.uk/help/matlab/matlab_prog/run-sections-of-programs.html step by step] through the tutorial script |kruX_tutorial_matlab.m|, the output of which is described on this [https://krux.googlecode.com/svn/trunk/html/kruX_tutorial_matlab.html tutorial page].
 
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
 
 == R ==
 
