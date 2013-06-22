@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary kruX download and installation instructions
 
 = Download and installation instructions =
 
