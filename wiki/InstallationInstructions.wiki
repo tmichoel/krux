@@ -1,4 +1,5 @@
 #summary kruX download and installation instructions
+#labels Featured
 
 = Download and installation instructions =
 
