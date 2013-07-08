@@ -216,8 +216,8 @@ CalculateKruskalWallisWithMatrix <- function(geno.para, mrna.para,
     while((id * num.transcript + 1) <= dim(mrna)[1]){
      ind.start <- id * num.transcript + 1
      ind.end <- min((id + 1) * num.transcript, dim(mrna)[1])
-     #cat("Processing from transcipt ID from ", ind.start, " to ", 
-     #    ind.end," ",format(Sys.time(), "%a %b %d %X %Y"),"\n")
+     cat("Processing from transcipt ID from ", ind.start, " to ", 
+         ind.end," ",format(Sys.time(), "%a %b %d %X %Y"),"\n")
      pre.result <- PreCalculate(id.missing == 0, ind.start, ind.end) 
      pre.result <- CalculateNoMissing(id.missing == 0, pre.result)
      result <- PostCalculate(id.missing == 0, pre.result)

@@ -172,6 +172,7 @@ def calculateKruskalWallisWithMatrix(geno,
     mrnaEnd   = mrnaStart[1:] + [mrna.shape[0]] 
     for ids in zip(mrnaStart, mrnaEnd):
       #Process a slice of  mrna
+      #print(ids[0], ids[1])
       preResult = preCalculate(snpsNoMissing, ids[0], ids[1])
       calculateNoMissing(snpsNoMissing, preResult) 
       result = postCalculate(snpsNoMissing, preResult) 
