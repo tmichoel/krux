@@ -6,13 +6,12 @@ import sys
 sys.path.append('../python/')
 import kruX
 
-def test(numSample, numSNP, numMRNA, perMissing, pThreshold):
+def test():
   """ Test the results from R's build-in kruskal wallis function, R's matrix-based
   kw test, and Python's matrix-based kw test
   directory.  Can be done in a nice way with rpy
   """
-  subprocess.call(['Rscript','test_kruX.R',str(numSample),
-                   str(numSNP), str(numMRNA), str(perMissing), str(pThreshold)])
+  subprocess.call(['Rscript','test_kruX.R'])
   outputFromR = numpy.genfromtxt('R.output',
                 dtype=[('SNP','i4'),('gene','i4'),('fd','i4'),
                        ('chi','f4'),('pvalue','f4') ] )
@@ -22,7 +21,7 @@ def test(numSample, numSNP, numMRNA, perMissing, pThreshold):
   mrna = mrna[:,1:] 
   start = time.clock()
   outputFromPython = kruX.calculateKruskalWallisWithMatrix(geno, mrna, 
-                     pValueThre = pThreshold)
+                     pValueThre = 1, numTranscript=1000)
   endTime = time.clock() - start
   print('Total running time for Python matrix-based test: %.2f'%(endTime))
   numpy.savetxt('python.output', outputFromPython, fmt='%i\t%i\t%i\t%.17e\t%.17e',delimiter='\t')
@@ -31,10 +30,8 @@ def test(numSample, numSNP, numMRNA, perMissing, pThreshold):
   else:  
     print('Failed: not equal between R matrix-based  and Python matrix-based test')
 
-def test_python_performance(numSample, numSNP, numMRNA, perMissing, pThreshold):
-  """ Test the results from R's build-in kruskal wallis function, R's matrix-based
-  kw test, and Python's matrix-based kw test
-  directory.  Can be done in a nice way with rpy
+def test_python_performance():
+  """Python's matrix-based kw test running time
   """
   geno = numpy.genfromtxt('geno.tab.tmp', skip_header=1, missing_values='NA')
   geno = geno[:,1:]
@@ -42,13 +39,11 @@ def test_python_performance(numSample, numSNP, numMRNA, perMissing, pThreshold):
   mrna = mrna[:,1:]
   start = time.clock()
   outputFromPython = kruX.calculateKruskalWallisWithMatrix(geno, mrna,
-                     pValueThre = pThreshold)
+                     pValueThre = 1)
   endTime = time.clock() - start
   print('Total running time for Python matrix-based test: %.2f'%(endTime))
   numpy.savetxt('python.output', outputFromPython, fmt='%i\t%i\t%i\t%.7f\t%.7f',delimiter='\t')
 
 if __name__ == '__main__':
-  for i in range(1):
-    print(str(i))
-    test(100, 100, 100, 0.2, 1)
-    #test_python_performance(100, 100, 100, 0.2, 1)
+  test()
+  #test_python_performance()
