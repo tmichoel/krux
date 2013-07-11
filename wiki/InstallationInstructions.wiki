@@ -7,7 +7,7 @@
 
 The recommended way to install kruX and keep up to date with any future versions is via the subversion system. If you are unfamiliar with this, see [http://subversion.apache.org/packages.html here] for a list of relevant software clients. Detailed instructions for how to checkout kruX can be found under the [https://code.google.com/p/krux/source/checkout Source] tab. 
 
-If you are unable to install kruX via subversion, you can download a frozen version from [http:// ...] (link not working yet).
+If you are unable to install kruX via subversion, you can [https://code.google.com/p/krux/source/browse/trunk browse] the source code repository and download the files for your version of interest one-by-one.
 
 After checking out kruX via subversion, there will be a new directory called "kruX", with subdirectories
 
