@@ -7,7 +7,7 @@
 
 The recommended way to install kruX and keep up to date with any future versions is via the subversion system. If you are unfamiliar with this, see [http://subversion.apache.org/packages.html here] for a list of relevant software clients. Detailed instructions for how to checkout kruX can be found under the [https://code.google.com/p/krux/source/checkout Source] tab. 
 
-If you are unable to install kruX via subversion, you can [https://code.google.com/p/krux/source/browse/trunk browse] the source code repository and download the files for your version of interest one-by-one.
+If you are unable to install kruX via subversion, you can [https://code.google.com/p/krux/source/browse/trunk browse] the source code repository and download the files for your version of interest one-by-one (click on a file name, then click "view raw file", and save).
 
 After checking out kruX via subversion, there will be a new directory called "kruX", with subdirectories
 
@@ -34,5 +34,21 @@ on the Matlab prompt, where <installation dir> is the location where kruX was ch
 
 == R ==
 
+Use the [http://stat.ethz.ch/R-manual/R-devel/library/base/html/source.html source] command to load kruX, like
+
+{{{
+> source('<installation dir>/kruX/r/kruX.R')
+}}}
+
+The example script "test_kruX.R" in the "kruX/test" directory illustrates how to run kruX.
 
 == Python ==
+
+Append kruX to your python path, like
+
+{{{
+>>> sys.path.append('<installation dir>/kruX/python/')
+>>> import kruX
+}}}
+
+The example script "test_kruX.py" in the "kruX/test" directory illustrates how to run kruX.
