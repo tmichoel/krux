@@ -186,10 +186,10 @@ def calculateKruskalWallisWithMatrix(geno,
       calculateMissing(snpsWithMissing, preResult)
       result = postCalculate(snpsWithMissing, preResult)
       output.append(result) if result.size>0 else None
-
-  if (output):#Bug
+  
+  if (output):
     output = numpy.concatenate(output)
-    output = output[numpy.argsort(output['pvalue'])]
+    #output = output[numpy.argsort(output['pvalue'])]
   
   return(output)
 
