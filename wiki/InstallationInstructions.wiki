@@ -47,6 +47,7 @@ The example script "test_kruX.R" in the "kruX/test" directory illustrates how to
 Append kruX to your python path, like
 
 {{{
+>>> import sys
 >>> sys.path.append('<installation dir>/kruX/python/')
 >>> import kruX
 }}}
