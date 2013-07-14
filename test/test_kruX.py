@@ -5,6 +5,7 @@ import os
 import sys
 sys.path.append('../python/')
 import kruX
+import resource
 
 def test():
   """ Test the results from R's build-in kruskal wallis function, R's matrix-based
@@ -21,9 +22,10 @@ def test():
   mrna = mrna[:,1:] 
   start = time.clock()
   outputFromPython = kruX.calculateKruskalWallisWithMatrix(geno, mrna, 
-                     pValueThre = 1, numTranscript=1000)
+                     pValueThre = 1, numTranscript=2000)
   endTime = time.clock() - start
   print('Total running time for Python matrix-based test: %.2f'%(endTime))
+  outputFromPython = outputFromPython[numpy.argsort(outputFromPython['pvalue'])]
   numpy.savetxt('python.output', outputFromPython, fmt='%i\t%i\t%i\t%.17e\t%.17e',delimiter='\t')
   if (numpy.all(outputFromR['pvalue']-outputFromPython['pvalue']<1e-7)):
     print('Passed: equal between R matrix-based  and Python matrix-based test')
@@ -39,10 +41,10 @@ def test_python_performance():
   mrna = mrna[:,1:]
   start = time.clock()
   outputFromPython = kruX.calculateKruskalWallisWithMatrix(geno, mrna,
-                     pValueThre = 1)
+                     pValueThre = 1, numTranscript=1000)
   endTime = time.clock() - start
   print('Total running time for Python matrix-based test: %.2f'%(endTime))
-  numpy.savetxt('python.output', outputFromPython, fmt='%i\t%i\t%i\t%.7f\t%.7f',delimiter='\t')
+  #numpy.savetxt('python.output', outputFromPython, fmt='%s\t%s\t%i\t%.7f\t%.7f',delimiter='\t')
 
 if __name__ == '__main__':
   test()

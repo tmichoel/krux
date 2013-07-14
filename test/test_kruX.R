@@ -7,7 +7,7 @@ write.table(geno, file='geno.tab.tmp' ,sep='\t', quote=F)
 write.table(mrna, file='mrna.tab.tmp' ,sep='\t', quote=F)
 
 t.start = proc.time()
-res1=CalculateKruskalWallisWithMatrix(geno, mrna, p.value.threshold, 1000)
+res1=CalculateKruskalWallisWithMatrix(geno, mrna, p.value.threshold, 2000)
 cat("Total running time for R matrix-based test: ", proc.time()[3]-t.start[3],"\n")
 res1=do.call(rbind, res1)
 write.table(res1[order(res1$pvalue),], file='R.output', quote=F, row.names=F, col.names=F)
