@@ -5,12 +5,7 @@ Tested on Python3.2 with numpy1.7 and scipy0.12
 import numpy 
 import scipy.stats
 import scipy.stats.mstats
-#import profilehooks
-import pdb
-import subprocess
-import os 
-import time
-#@profilehooks.timecall
+
 def calculateKruskalWallisWithMatrix(geno, 
                                      mrna,
                                      pValueThre = 1e-3,
@@ -21,7 +16,7 @@ def calculateKruskalWallisWithMatrix(geno,
   Args:
              geno: Matrix for SNPs where each column are SNPs of a particular
                    sample and each row are the values of a particular SNP 
-                   cross all samples. 
+                   cross all samples. See the sample data in test directory 
              mrna: Matrix for expressiion values of transcrtips. The format 
                    is defined same as genotype matrix.
        pValueThre: Only pairs of SNP-transcript  with p-values less than the 
@@ -31,7 +26,7 @@ def calculateKruskalWallisWithMatrix(geno,
      shuffledMrna: If T, mrna is shuffled, so the result is based on 
                    perturbation data. Default value is F
   Returns: 
-     Ordered transcript-SNP pairs by their p-values
+     transcript-SNP pairs with their p-values
   
   version 1.0 May 2, 2013 Initial code
 	      Jun 7, 2012 remove numpy.apply_along_axis function
