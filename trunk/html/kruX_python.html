@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module kruX</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>kruX</strong></big></big></font></td
+><td align=right valign=bottom
+    <p><tt>Matrix-based&nbsp;implementation&nbsp;for&nbsp;Kruskal-wallis&nbsp;test<br>
+Tested&nbsp;on&nbsp;Python3.2&nbsp;with&nbsp;numpy1.7&nbsp;and&nbsp;scipy0.12</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+    
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-calculateKruskalWallisWithMatrix"><strong>calculateKruskalWallisWithMatrix</strong></a>(geno, mrna, pValueThre<font color="#909090">=0.001</font>, numTranscript<font color="#909090">=1000</font>, shuffledMrna<font color="#909090">=False</font>)</dt><dd><tt>Compute&nbsp;Kruskal-Wallis&nbsp;test&nbsp;p-values&nbsp;for&nbsp;pairs&nbsp;of&nbsp;transcripts&nbsp;and&nbsp;SNPs&nbsp;with<br>
+matrix&nbsp;operations.<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;geno:&nbsp;Matrix&nbsp;for&nbsp;SNPs&nbsp;where&nbsp;each&nbsp;column&nbsp;are&nbsp;SNPs&nbsp;of&nbsp;a&nbsp;particular<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sample&nbsp;and&nbsp;each&nbsp;row&nbsp;are&nbsp;the&nbsp;values&nbsp;of&nbsp;a&nbsp;particular&nbsp;SNP&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cross&nbsp;all&nbsp;samples.&nbsp;See&nbsp;the&nbsp;sample&nbsp;data&nbsp;in&nbsp;test&nbsp;directory&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mrna:&nbsp;Matrix&nbsp;for&nbsp;expressiion&nbsp;values&nbsp;of&nbsp;transcrtips.&nbsp;The&nbsp;format&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;defined&nbsp;same&nbsp;as&nbsp;genotype&nbsp;matrix.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pValueThre:&nbsp;Only&nbsp;pairs&nbsp;of&nbsp;SNP-transcript&nbsp;&nbsp;with&nbsp;p-values&nbsp;less&nbsp;than&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;threshold&nbsp;are&nbsp;included&nbsp;in&nbsp;the&nbsp;calculation<br>
+&nbsp;&nbsp;numTranscript:&nbsp;The&nbsp;number&nbsp;of&nbsp;transcripts&nbsp;to&nbsp;be&nbsp;calculated&nbsp;in&nbsp;one&nbsp;round.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;parameter&nbsp;is&nbsp;determined&nbsp;by&nbsp;available&nbsp;&nbsp;memory&nbsp;size&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;shuffledMrna:&nbsp;If&nbsp;T,&nbsp;mrna&nbsp;is&nbsp;shuffled,&nbsp;so&nbsp;the&nbsp;result&nbsp;is&nbsp;based&nbsp;on&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perturbation&nbsp;data.&nbsp;Default&nbsp;value&nbsp;is&nbsp;F<br>
+Returns:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;transcript-SNP&nbsp;pairs&nbsp;with&nbsp;their&nbsp;p-values<br>
+&nbsp;<br>
+version&nbsp;1.0&nbsp;May&nbsp;2,&nbsp;2013&nbsp;Initial&nbsp;code<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jun&nbsp;7,&nbsp;2012&nbsp;remove&nbsp;numpy.apply_along_axis&nbsp;function</tt></dd></dl>
+</td></tr></table>
+</body></html>
