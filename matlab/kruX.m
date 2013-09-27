@@ -116,7 +116,7 @@ else % now we proceed with the normal case of unsliced data
     % create genotype group index vectors
     Ic = cell(nC+1,1);
     for k=0:nC
-        Ic{k+1} = sparse(C==k);
+        Ic{k+1} = double(C==k);
     end
     % same for missing values
     In = C==-1 | isnan(C);
@@ -135,6 +135,7 @@ else % now we proceed with the normal case of unsliced data
         if missD==0
             for k=0:nC
                 Ne{k+1} = repmat(sum(Ic{k+1}(ixc,:),2)', [size(R,1),1]);
+                %Ne{k+1} = sum(Ic{k+1}(ixc,:),2)';
             end
         else
             for k=0:nC
@@ -147,6 +148,7 @@ else % now we proceed with the normal case of unsliced data
         S = zeros(size(D,1),length(ixc));
         for k=0:nC
             mR = ((R*Ic{k+1}(ixc,:)').^2)./Ne{k+1};
+            %mR = bsxfun(@rdivide, (R*Ic{k+1}(ixc,:)').^2, Ne{k+1});
             % any NaN result from 0/0 for empty groups, set them to 0 to remove from sum
             mR(isnan(mR)) = 0;
             % sum
